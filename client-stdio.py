@@ -11,7 +11,7 @@ from altitude_mcp_server import logger
 
 
 base_url="https://api.deepseek.com"
-api_key='sk-00141ef3447840dda7bc7f06f7318d9d'
+api_key='*****'
 model_name="deepseek-chat"
 
 
