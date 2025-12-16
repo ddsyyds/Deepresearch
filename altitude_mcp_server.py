@@ -7,7 +7,7 @@ import pandas as pd
 import logging
 
 base_url="https://api.deepseek.com"
-api_key='sk-00141ef3447840dda7bc7f06f7318d9d'
+api_key=''
 model_name="deepseek-chat"
 # 创建日志记录器
 logger = logging.getLogger(__name__)
@@ -229,44 +229,6 @@ def search(query: str) -> str:
 
         iteration += 1
     return '\n\n'.join(aggregated_contexts)
-
-@mcp.tool()
-def get_elevation(lat:float, lng:float) -> float:
-    """获取指定经纬度的海拔高度（单位：米）"""
-    url = "https://www.advancedconverter.com/ajax/getElev9.php"
-    params = {
-        "lat": lat,
-        "lng": lng,
-        "cookieIDD": "LxJ04W9RY58o8A=="  # 固定参数不可改
-    }
-    # 添加请求头，伪装成浏览器访问
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-        "Referer": "https://www.advancedconverter.com/map-tools/find-altitude-by-coordinates",  # 来源页
-        "Accept": "application/json, text/javascript, */*; q=0.01",  # 声明接收JSON格式
-        "X-Requested-With": "XMLHttpRequest"  # 标记为AJAX请求（网站后端可能校验）
-    }
-    try:
-        response = requests.get(
-            url,
-            params=params,
-            headers=headers,
-            timeout=15,
-            verify=True  # 若出现SSL错误，可改为False（不推荐）
-        )
-        print(f"响应状态码：{response.status_code}")  # 先查看状态码（200=正常）
-        print(f"响应内容：{response.text}")  # 打印原始响应，排查是否为JSON
-        response.raise_for_status()  # 若状态码是4xx/5xx，直接抛出错误
-        data = response.json()
-        elevation_m = data["results"]["results"][0]["elevation"]
-        return elevation_m
-    except requests.exceptions.HTTPError as e:
-        print(f"HTTP错误：{e}")
-    except ValueError as e:
-        print(f"JSON解析失败：{e}")
-    except Exception as e:
-        print(f"其他错误：{str(e)}")
-    return 0
 
 if __name__ == "__main__":
     mcp.run('streamable-http')
