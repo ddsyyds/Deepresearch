@@ -3,7 +3,6 @@ import pymysql
 import requests
 from openai import OpenAI
 mcp = FastMCP("search",port=8001)
-import pandas as pd
 import logging
 
 base_url="https://api.deepseek.com"
